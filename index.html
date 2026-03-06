@@ -1,0 +1,762 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Canyon Portal | 接続ガイド</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --theme-color: #FBC02D;
+            --bg-color: #0c0e12;
+            --glass-bg: rgba(255, 255, 255, 0.05);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --error-color: #ff5252;
+            --portal-transition: 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Outfit', sans-serif;
+        }
+
+        body {
+            background: var(--bg-color);
+            color: #fff;
+            overflow: hidden;
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        #portal-frame {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            pointer-events: none;
+            z-index: 1000;
+            border: 8px solid var(--theme-color);
+            box-shadow: inset 0 0 30px rgba(0, 0, 0, 0.5), 0 0 20px var(--theme-color);
+            transition: border-color var(--portal-transition), box-shadow var(--portal-transition);
+        }
+
+        body.is-error #portal-frame {
+            --theme-color: var(--error-color) !important;
+            animation: pulse-error 2s infinite ease-in-out;
+        }
+
+        @keyframes pulse-error {
+
+            0%,
+            100% {
+                opacity: 1;
+                box-shadow: inset 0 0 50px rgba(0, 0, 0, 0.8), 0 0 10px var(--error-color);
+            }
+
+            50% {
+                opacity: 0.6;
+                box-shadow: inset 0 0 80px rgba(0, 0, 0, 1), 0 0 30px var(--error-color);
+            }
+        }
+
+        .portal-card {
+            width: 720px;
+            min-height: 480px;
+            max-height: 90vh;
+            background: var(--glass-bg);
+            backdrop-filter: blur(30px);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 40px 100px rgba(0, 0, 0, 0.6);
+            overflow: hidden;
+        }
+
+        .portal-header {
+            padding: 30px 40px 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .step-id {
+            font-size: 0.9rem;
+            font-weight: 600;
+            opacity: 0.4;
+            letter-spacing: 2px;
+        }
+
+        .portal-content {
+            flex-grow: 1;
+            overflow-y: auto;
+            overflow-x: hidden;
+            padding: 0 40px 8px;
+            scrollbar-width: thin;
+            scrollbar-color: rgba(255, 255, 255, 0.15) transparent;
+        }
+
+        .portal-content::-webkit-scrollbar {
+            width: 4px;
+        }
+
+        .portal-content::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 4px;
+        }
+
+        .step-content {
+            display: none;
+        }
+
+        .step-content.active {
+            display: block;
+            animation: stepFadeIn 0.35s ease forwards;
+        }
+
+        @keyframes stepFadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(8px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        h1 {
+            font-size: 1.8rem;
+            margin-bottom: 12px;
+            font-weight: 600;
+        }
+
+        p {
+            color: rgba(255, 255, 255, 0.6);
+            line-height: 1.6;
+            font-size: 1rem;
+        }
+
+        .portal-footer {
+            padding: 20px 40px 40px;
+            display: flex;
+            gap: 16px;
+            justify-content: space-between;
+            align-items: center;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .btn {
+            height: 50px;
+            padding: 0 32px;
+            border-radius: 12px;
+            border: none;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 160px;
+        }
+
+        .btn-primary {
+            background: var(--theme-color);
+            color: #000;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px var(--theme-color);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.1);
+            color: #fff;
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .key-box {
+            background: rgba(0, 0, 0, 0.4);
+            border-radius: 8px;
+            color: #00bcd4;
+            padding: 16px;
+            font-family: monospace;
+            font-size: 0.85rem;
+            margin: 16px 0;
+            border-left: 3px solid #00bcd4;
+            word-break: break-all;
+            line-height: 1.5;
+        }
+
+        .ssh-input {
+            width: 100%;
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 8px;
+            color: #fff;
+            padding: 10px 14px;
+            font-size: 0.95rem;
+            font-family: 'Outfit', sans-serif;
+            margin: 12px 0 4px;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        .ssh-input:focus {
+            border-color: var(--theme-color);
+        }
+
+        .ssh-input::placeholder {
+            color: rgba(255, 255, 255, 0.25);
+        }
+
+        .ssh-action-row {
+            display: flex;
+            gap: 10px;
+            margin-top: 8px;
+            flex-wrap: wrap;
+        }
+
+        .btn-sm {
+            height: 38px;
+            padding: 0 18px;
+            border-radius: 8px;
+            border: none;
+            font-size: 0.88rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .btn-generate {
+            background: var(--theme-color);
+            color: #000;
+        }
+
+        .btn-generate:hover {
+            filter: brightness(1.1);
+        }
+
+        .btn-copy {
+            background: rgba(0, 188, 212, 0.15);
+            color: #00bcd4;
+            border: 1px solid rgba(0, 188, 212, 0.3);
+        }
+
+        .btn-copy:hover {
+            background: rgba(0, 188, 212, 0.3);
+        }
+
+        .btn-download {
+            background: rgba(156, 39, 176, 0.15);
+            color: #ce93d8;
+            border: 1px solid rgba(156, 39, 176, 0.3);
+        }
+
+        .btn-download:hover {
+            background: rgba(156, 39, 176, 0.3);
+        }
+
+        .key-status {
+            font-size: 0.8rem;
+            opacity: 0.6;
+            margin-top: 4px;
+            min-height: 18px;
+            transition: color 0.3s;
+        }
+
+        .key-status.ok {
+            color: #4CAF50;
+            opacity: 1;
+        }
+
+        .key-status.warn {
+            color: #FBC02D;
+            opacity: 1;
+        }
+
+        /* --- Collapsible Details --- */
+        details {
+            margin-top: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        summary {
+            padding: 10px 14px;
+            font-size: 0.88rem;
+            font-weight: 600;
+            color: rgba(255, 255, 255, 0.5);
+            cursor: pointer;
+            list-style: none;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            user-select: none;
+            transition: background 0.2s, color 0.2s;
+        }
+
+        summary::-webkit-details-marker {
+            display: none;
+        }
+
+        summary::before {
+            content: '▶';
+            font-size: 0.65rem;
+            transition: transform 0.2s;
+        }
+
+        details[open] summary::before {
+            transform: rotate(90deg);
+        }
+
+        details[open] summary {
+            color: rgba(255, 255, 255, 0.8);
+            background: rgba(255, 255, 255, 0.04);
+        }
+
+        summary:hover {
+            color: rgba(255, 255, 255, 0.75);
+            background: rgba(255, 255, 255, 0.03);
+        }
+
+        .details-body {
+            padding: 0 14px 14px;
+            font-size: 0.85rem;
+            color: rgba(255, 255, 255, 0.5);
+            line-height: 1.7;
+        }
+
+        .details-body ol,
+        .details-body ul {
+            padding-left: 1.2em;
+        }
+
+        .details-body code {
+            background: rgba(0, 0, 0, 0.4);
+            padding: 1px 6px;
+            border-radius: 4px;
+            font-family: monospace;
+            font-size: 0.9em;
+            color: #00bcd4;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="portal-frame"></div>
+    <div class="portal-card">
+        <div class="portal-header">
+            <div style="font-weight: 600; font-size: 1.1rem; opacity: 0.8;">Canyon Portal</div>
+            <div class="step-id" id="step-id">STEP 01/07</div>
+        </div>
+
+        <div class="portal-content">
+            <!-- Welcome -->
+            <div class="step-content active" id="step-id-welcome">
+                <h1>Canyon 接続ガイド</h1>
+                <p>このガイドでは、Gitサーバー「Canyon」に接続するために必要な設定を順番に案内します。<br />
+                    所要時間は初回のみ15〜30分ほどです。</p>
+                <details>
+                    <summary>Canyon とは？</summary>
+                    <div class="details-body">
+                        <p>「Canyon」は、モデリングコミュニティ向けに用意された非公開のGitサーバーです。<br />
+                            大容量ファイルの管理（Git LFS対応予定）や、メンバー間のプロジェクト共有が行えます。<br />
+                            サーバーはTailscale VPN経由でのみアクセス可能なため、外部からの不正アクセスは遮断されています。</p>
+                    </div>
+                </details>
+            </div>
+
+            <!-- Step 1: Invitation -->
+            <div class="step-content" id="step-id-invitation">
+                <h1>Step 1: 招待を受け取る</h1>
+                <p>Canyonへのアクセスには、管理者からTailscaleの招待が必要です。<br />
+                    管理者に連絡して、招待メールを送ってもらってください。</p>
+                <div class="key-box" style="color: var(--theme-color); border-color: var(--theme-color);">
+                    招待メールの送信元: <strong>Tailscale &lt;no-reply@tailscale.com&gt;</strong><br />
+                    メール内の「Accept invite」または「招待を承諾する」をクリックしてください。
+                </div>
+                <details>
+                    <summary>招待が届かない場合</summary>
+                    <div class="details-body">
+                        <ul>
+                            <li>迷惑メールフォルダを確認してください。</li>
+                            <li>管理者に再送を依頼してください。</li>
+                            <li>すでにTailscaleアカウントをお持ちの場合、招待はそのアカウントに関連付けられます。</li>
+                        </ul>
+                    </div>
+                </details>
+            </div>
+
+            <!-- Step 2: Tailscale -->
+            <div class="step-content" id="step-id-tailscale">
+                <h1>Step 2: Tailscale のインストールと接続</h1>
+                <p>Tailscaleをインストールし、招待を承諾したアカウントでサインインしてください。<br />
+                    アプリのアイコンが<strong>「Connected」</strong>になれば、サーバーへのアクセスが可能になります。</p>
+                <details>
+                    <summary>OS別ダウンロード先</summary>
+                    <div class="details-body">
+                        <ul>
+                            <li><strong>Windows:</strong> <a href="https://tailscale.com/download/windows"
+                                    target="_blank" rel="noopener noreferrer"
+                                    style="color:#00bcd4;">tailscale.com/download/windows ↗</a></li>
+                            <li><strong>macOS:</strong> App Store で「Tailscale」を検索、または <a
+                                    href="https://tailscale.com/download/mac" target="_blank" rel="noopener noreferrer"
+                                    style="color:#00bcd4;">tailscale.com/download/mac ↗</a></li>
+                            <li><strong>Linux:</strong> <code>curl -fsSL https://tailscale.com/install.sh | sh</code>
+                            </li>
+                        </ul>
+                    </div>
+                </details>
+            </div>
+
+            <!-- Step 3: Gitea Account -->
+            <div class="step-content" id="step-id-gitea">
+                <h1>Step 3: Gitea アカウントの作成</h1>
+                <p>Gitサーバーの操作画面（Gitea）にアクセスして、ユーザーアカウントを作成してください。<br />
+                    <a href="http://100.123.245.125:3000" target="_blank" rel="noopener noreferrer"
+                        style="color: var(--theme-color); text-decoration: none; font-weight: 600;">Gitea を開く ↗</a>
+                </p>
+                <details>
+                    <summary>アカウント作成の手順</summary>
+                    <div class="details-body">
+                        <ol>
+                            <li>上のリンクからGiteaのトップページを開く。</li>
+                            <li>右上の「Register（登録）」をクリック。</li>
+                            <li>ユーザー名・メールアドレス・パスワードを入力して登録する。</li>
+                            <li>登録後、管理者にユーザー名を伝えると、リポジトリへのアクセス権が付与されます。</li>
+                        </ol>
+                    </div>
+                </details>
+            </div>
+
+            <!-- Step 4: SSH Key -->
+            <div class="step-content" id="step-id-ssh">
+                <h1>Step 4: SSH 認証鍵の生成</h1>
+                <p>Gitの操作（clone / push / pull）にはSSH鍵認証が必要です。<br />
+                    下のボタンを押すと、ブラウザ内で鍵ペア（公開鍵・秘密鍵）が生成されます。<strong>鍵はサーバーに送信されません。</strong></p>
+                <label style="font-size:0.85rem; opacity:0.5;">鍵のコメント（任意）— Giteaの設定画面で識別するための名前</label>
+                <input type="text" id="ssh-comment" class="ssh-input" placeholder="例: myname-windows" maxlength="60" />
+                <div class="ssh-action-row">
+                    <button class="btn-sm btn-generate" id="btn-generate" onclick="generateSSHKey()">⚡ 鍵を生成する</button>
+                </div>
+                <div id="ssh-pubkey-box" style="display:none;">
+                    <div class="key-box" id="ssh-key-display" style="cursor:text; user-select:all;">...</div>
+                    <div class="ssh-action-row">
+                        <button class="btn-sm btn-copy" id="btn-copy-key" onclick="copyPublicKey()">📋 公開鍵をコピー</button>
+                        <button class="btn-sm btn-download" id="btn-dl-key" onclick="downloadPrivateKey()">💾
+                            秘密鍵を保存</button>
+                        <button class="btn-sm btn-download" id="btn-dl-config" onclick="downloadSSHConfig()">⚙️
+                            SSH設定ファイルを保存</button>
+                    </div>
+                    <div class="key-status" id="key-status"></div>
+                </div>
+                <details>
+                    <summary>SSH鍵とは？秘密鍵の保存場所について</summary>
+                    <div class="details-body">
+                        <p>SSH鍵はパスワードの代わりに使用する認証情報です。「秘密鍵」と「公開鍵」の2つがセットです。</p>
+                        <ul>
+                            <li><strong>公開鍵</strong>（次のステップでGiteaに登録）: サーバーに渡すもの。外部に公開しても問題ありません。</li>
+                            <li><strong>秘密鍵</strong>（ダウンロードして保存）: 絶対に他人に渡さないでください。</li>
+                        </ul>
+                        <p>秘密鍵の保存先:</p>
+                        <ul>
+                            <li><strong>Windows:</strong> <code>C:\Users\あなたのユーザー名\.ssh\id_ed25519</code></li>
+                            <li><strong>macOS / Linux:</strong> <code>~/.ssh/id_ed25519</code></li>
+                        </ul>
+                        <p>保存後、<code>chmod 600 ~/.ssh/id_ed25519</code>（macOS/Linux）で権限を設定してください。</p>
+                    </div>
+                </details>
+            </div>
+
+            <!-- Step 5: Registration -->
+            <div class="step-content" id="step-id-registration">
+                <h1>Step 5: 公開鍵を Gitea に登録する</h1>
+                <p>前のステップでコピーした公開鍵を、Giteaのアカウント設定に登録してください。<br />
+                    <a href="http://100.123.245.125:3000/user/settings/keys" target="_blank" rel="noopener noreferrer"
+                        style="color: var(--theme-color); text-decoration: none; font-weight: 600;">Gitea →
+                        SSH鍵の設定ページを開く ↗</a>
+                </p>
+                <details>
+                    <summary>登録手順</summary>
+                    <div class="details-body">
+                        <ol>
+                            <li>上のリンクからGiteaのSSH鍵設定ページを開く。</li>
+                            <li>「鍵を追加する」または「Add Key」をクリック。</li>
+                            <li>「タイトル」に任意の名前（例: my-pc）を入力。</li>
+                            <li>「コンテンツ」欄に、前のステップでコピーした公開鍵（<code>ssh-ed25519 AAAA...</code> で始まる文字列）を貼り付ける。</li>
+                            <li>「鍵を追加する」ボタンで保存する。</li>
+                        </ol>
+                    </div>
+                </details>
+            </div>
+
+            <!-- Step 6: Git Tool -->
+            <div class="step-content" id="step-id-gittool">
+                <h1>Step 6: TortoiseGit のインストール</h1>
+                <p>Windowsで Git を GUI で操作するためのツール「TortoiseGit」をインストールしてください。<br />
+                    右クリックメニューからclone・push・pullができるようになります。</p>
+                <div class="ssh-action-row" style="margin-top:12px;">
+                    <a href="https://tortoisegit.org/download/" target="_blank" rel="noopener noreferrer" style="display:inline-flex; align-items:center; gap:6px; height:38px; padding:0 18px;
+                               background:rgba(251,192,45,0.15); color:#FBC02D; border:1px solid rgba(251,192,45,0.3);
+                               border-radius:8px; font-size:0.88rem; font-weight:600; text-decoration:none;
+                               transition:0.2s;" onmouseover="this.style.background='rgba(251,192,45,0.3)'"
+                        onmouseout="this.style.background='rgba(251,192,45,0.15)'">
+                        🐢 TortoiseGit をダウンロード ↗
+                    </a>
+                </div>
+                <details style="margin-top:14px;">
+                    <summary>インストール手順</summary>
+                    <div class="details-body">
+                        <ol>
+                            <li>上のリンクから <strong>TortoiseGit</strong>（64-bit）をダウンロードしてインストールする。</li>
+                            <li>インストール後、任意のフォルダを右クリックして「TortoiseGit」メニューが表示されることを確認する。</li>
+                            <li>初回起動時に「Git for Windows」が必要と案内される場合は、同ページから <strong>Git for Windows</strong> もインストールする。
+                            </li>
+                        </ol>
+                    </div>
+                </details>
+                <details>
+                    <summary>SSH設定ファイルの確認（重要）</summary>
+                    <div class="details-body">
+                        <p>Step 4 でダウンロードした <code>config</code> ファイルを、以下の場所に配置してください。<br />
+                            このファイルにより、TortoiseGit が Canyon の特殊なSSHポート（222番）を自動認識します。</p>
+                        <ul>
+                            <li>配置先: <code>C:\Users\あなたのユーザー名\.ssh\config</code></li>
+                            <li>（<code>.ssh</code> フォルダがない場合は新規作成してください）</li>
+                        </ul>
+                        <p>ファイルの中身はこのようになっています：</p>
+                        <pre
+                            style="background:rgba(0,0,0,0.4); padding:10px; border-radius:6px; font-size:0.82rem; color:#00bcd4; overflow-x:auto;">Host canyon
+    HostName 100.123.245.125
+    Port 222
+    User git
+    IdentityFile ~/.ssh/id_ed25519</pre>
+                    </div>
+                </details>
+            </div>
+
+            <!-- Step 7: Clone with TortoiseGit -->
+            <div class="step-content" id="step-id-finish">
+                <h1>Step 7: TortoiseGit でクローンする</h1>
+                <p>TortoiseGit を使って、リポジトリをPCにダウンロード（クローン）します。<br />
+                    <code style="font-size:0.85rem; color:rgba(255,255,255,0.4);">(Org) と (Repo) は管理者に確認してください。</code>
+                </p>
+                <div class="key-box" style="color:#4CAF50; border-color:#4CAF50;">
+                    canyon:/(Org)/(Repo).git
+                </div>
+                <details>
+                    <summary>クローン手順（TortoiseGit）</summary>
+                    <div class="details-body">
+                        <ol>
+                            <li>クローン先にしたいフォルダを右クリックし、「TortoiseGit」→「クローン...」を選択。</li>
+                            <li>「URL」欄に上のURL（<code>canyon:/...</code> の形式）を入力する。</li>
+                            <li>「参照するディレクトリ」に保存したいフォルダのパスを確認して「OK」。</li>
+                            <li>初回接続時に「Known hosts」への追加確認ダイアログが出たら「はい」を選択。</li>
+                            <li>クローンが完了したら成功です。</li>
+                        </ol>
+                    </div>
+                </details>
+                <details>
+                    <summary>クローンが失敗する場合</summary>
+                    <div class="details-body">
+                        <ul>
+                            <li>Tailscaleが「Connected」状態か確認してください。</li>
+                            <li><code>C:\Users\あなた\.ssh\config</code> が正しく配置されているか確認してください。</li>
+                            <li><code>C:\Users\あなた\.ssh\id_ed25519</code>（秘密鍵）が存在するか確認してください。</li>
+                            <li>GiteaのSSH設定に公開鍵が登録されているか確認してください（Step 5）。</li>
+                            <li>Giteaのリポジトリへのアクセス権が付与されているか管理者に確認してください。</li>
+                        </ul>
+                    </div>
+                </details>
+            </div>
+        </div>
+
+        <div class="portal-footer">
+            <button class="btn btn-primary" id="btn-next" onclick="handleNext()">次に進む</button>
+            <button class="btn btn-secondary" id="btn-prev" onclick="handlePrev()"
+                style="visibility:hidden;">戻る</button>
+        </div>
+    </div>
+
+    <script>
+        let currentStep = 1;
+        const totalSteps = 8;
+        const SSH_STEP_INDEX = 5; // 1-based index of the 'ssh' step
+
+        const stepIds = ['welcome', 'invitation', 'tailscale', 'gitea', 'ssh', 'registration', 'gittool', 'finish'];
+        const colors = ['#FBC02D', '#FF9800', '#00BCD4', '#0052cc', '#9C27B0', '#609926', '#FF7043', '#4CAF50'];
+        const btnTexts = ['ガイドを開始する', '招待をうけとった', '接続を確認した', '登録完了', '鍵の準備ができたら次へ', '登録を完了した', 'インストール完了', '最初に戻る'];
+
+        // ------- Nav -------
+        function updateUI() {
+            document.documentElement.style.setProperty('--theme-color', colors[currentStep - 1]);
+            document.getElementById('step-id').innerText = `STEP ${String(currentStep).padStart(2, '0')}/08`;
+            const nextBtn = document.getElementById('btn-next');
+            const prevBtn = document.getElementById('btn-prev');
+            nextBtn.innerText = btnTexts[currentStep - 1];
+            prevBtn.style.visibility = currentStep > 1 ? 'visible' : 'hidden';
+
+            document.querySelectorAll('.step-content').forEach(el => el.classList.remove('active'));
+            document.getElementById('step-id-' + stepIds[currentStep - 1]).classList.add('active');
+        }
+
+        function handleNext() {
+            if (currentStep === totalSteps) {
+                currentStep = 1;
+            } else {
+                currentStep++;
+            }
+            updateUI();
+        }
+
+        function handlePrev() {
+            if (currentStep > 1) {
+                currentStep--;
+                updateUI();
+            }
+        }
+
+        // ------- SSH Key Generation (Web Crypto API / Ed25519) -------
+        let _generatedPublicKeyStr = null;
+        let _generatedPrivateKeyPem = null;
+
+        async function generateSSHKey() {
+            const btn = document.getElementById('btn-generate');
+            const comment = document.getElementById('ssh-comment').value.trim() || 'canyon-member';
+
+            btn.disabled = true;
+            btn.textContent = '⏳ 生成中...';
+
+            try {
+                // Generate Ed25519 key pair
+                const keyPair = await crypto.subtle.generateKey(
+                    { name: 'Ed25519' },
+                    true,          // extractable
+                    ['sign', 'verify']
+                );
+
+                // --- Export Public Key as OpenSSH wire format ---
+                const pubRaw = await crypto.subtle.exportKey('raw', keyPair.publicKey);
+                _generatedPublicKeyStr = encodeOpenSSHPublicKey(new Uint8Array(pubRaw), comment);
+
+                // --- Export Private Key as PEM (PKCS#8) ---
+                const privPkcs8 = await crypto.subtle.exportKey('pkcs8', keyPair.privateKey);
+                _generatedPrivateKeyPem = arrayBufferToPem(privPkcs8, 'PRIVATE KEY');
+
+                // Show results
+                document.getElementById('ssh-key-display').textContent = _generatedPublicKeyStr;
+                document.getElementById('ssh-pubkey-box').style.display = 'block';
+                setStatus('✅ 鍵の生成に成功しました！秘密鍵を保存してから次へ進んでね。', 'ok');
+
+            } catch (err) {
+                // Ed25519 may not be supported in older browsers
+                console.error(err);
+                setStatus('❌ お使いのブラウザはEd25519に対応していない可能性があります。Chrome / Edge 最新版をお試しください。', 'warn');
+                document.body.classList.add('is-error');
+            } finally {
+                btn.disabled = false;
+                btn.textContent = '🔄 再生成する';
+            }
+        }
+
+        // Encode an Ed25519 raw public key to OpenSSH format (base64)
+        function encodeOpenSSHPublicKey(rawBytes, comment) {
+            const keyType = 'ssh-ed25519';
+            const typeBytes = new TextEncoder().encode(keyType);
+
+            // Wire format: len(type) ++ type ++ len(key) ++ key
+            const buf = new Uint8Array(4 + typeBytes.length + 4 + rawBytes.length);
+            let pos = 0;
+
+            // Write uint32 big-endian helper
+            const writeU32 = (v) => {
+                buf[pos++] = (v >>> 24) & 0xff;
+                buf[pos++] = (v >>> 16) & 0xff;
+                buf[pos++] = (v >>> 8) & 0xff;
+                buf[pos++] = v & 0xff;
+            };
+
+            writeU32(typeBytes.length);
+            buf.set(typeBytes, pos); pos += typeBytes.length;
+
+            writeU32(rawBytes.length);
+            buf.set(rawBytes, pos);
+
+            const b64 = btoa(String.fromCharCode(...buf));
+            return `${keyType} ${b64} ${comment}`;
+        }
+
+        // Convert an ArrayBuffer to PEM string
+        function arrayBufferToPem(buffer, label) {
+            const b64 = btoa(String.fromCharCode(...new Uint8Array(buffer)));
+            const lines = b64.match(/.{1,64}/g).join('\n');
+            return `-----BEGIN ${label}-----\n${lines}\n-----END ${label}-----\n`;
+        }
+
+        async function copyPublicKey() {
+            if (!_generatedPublicKeyStr) return;
+            try {
+                await navigator.clipboard.writeText(_generatedPublicKeyStr);
+                setStatus('📋 公開鍵をクリップボードにコピーしました！Giteaの設定画面に貼り付けてね。', 'ok');
+            } catch {
+                setStatus('⚠️ クリップボードへのアクセスが拒否されました。手動でコピーしてね。', 'warn');
+            }
+        }
+
+        function downloadPrivateKey() {
+            if (!_generatedPrivateKeyPem) return;
+            const blob = new Blob([_generatedPrivateKeyPem], { type: 'application/octet-stream' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'id_ed25519';
+            a.click();
+            URL.revokeObjectURL(url);
+            setStatus('💾 秘密鍵を保存しました。~/.ssh/id_ed25519 に置いてね（Windows は C:\\Users\\あなた\\.ssh\\）。', 'ok');
+        }
+
+        function downloadSSHConfig() {
+            const configContent =
+                `Host canyon
+    HostName 100.123.245.125
+    Port 222
+    User git
+    IdentityFile ~/.ssh/id_ed25519
+`;
+            const blob = new Blob([configContent], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'config';
+            a.click();
+            URL.revokeObjectURL(url);
+            setStatus('⚙️ SSH設定ファイルを保存しました。C:\\Users\\あなた\\.ssh\\config に配置してください。', 'ok');
+        }
+
+        function setStatus(msg, type) {
+            const el = document.getElementById('key-status');
+            el.textContent = msg;
+            el.className = 'key-status ' + (type || '');
+        }
+    </script>
+</body>
+
+</html>
