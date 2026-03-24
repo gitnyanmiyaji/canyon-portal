@@ -441,7 +441,8 @@
             </div>
 
             <!-- Step 4: Gitea Account -->
-                <h1>Step 3: Gitea アカウントの作成</h1>
+            <div class="step-content" id="step-id-gitea">
+                <h1>Step 4: Gitea アカウントの作成</h1>
                 <p>Gitサーバーの操作画面（Gitea）にアクセスして、ユーザーアカウントを作成してください。<br />
                     <a href="http://canyon-gitea.tail2582f9.ts.net:3000" target="_blank" rel="noopener noreferrer"
                         style="color: var(--theme-color); text-decoration: none; font-weight: 600;">Gitea を開く ↗</a>
@@ -459,9 +460,9 @@
                 </details>
             </div>
 
-            <!-- Step 4: SSH Key -->
+            <!-- Step 5: SSH Key -->
             <div class="step-content" id="step-id-ssh">
-                <h1>Step 4: SSH 認証鍵の生成</h1>
+                <h1>Step 5: SSH 認証鍵の生成</h1>
                 <p>Gitの操作（clone / push / pull）にはSSH鍵認証が必要です。<br />
                     下のボタンを押すと、ブラウザ内で鍵ペア（公開鍵・秘密鍵）が生成されます。<strong>鍵はサーバーに送信されません。</strong></p>
                 <label style="font-size:0.85rem; opacity:0.5;">鍵のコメント（任意）— Giteaの設定画面で識別するための名前</label>
@@ -498,9 +499,9 @@
                 </details>
             </div>
 
-            <!-- Step 5: Registration -->
+            <!-- Step 6: Registration -->
             <div class="step-content" id="step-id-registration">
-                <h1>Step 5: 公開鍵を Gitea に登録する</h1>
+                <h1>Step 6: 公開鍵を Gitea に登録する</h1>
                 <p>前のステップでコピーした公開鍵を、Giteaのアカウント設定に登録してください。<br />
                     <a href="http://canyon-gitea.tail2582f9.ts.net:3000/user/settings/keys" target="_blank" rel="noopener noreferrer"
                         style="color: var(--theme-color); text-decoration: none; font-weight: 600;">Gitea →
@@ -520,9 +521,9 @@
                 </details>
             </div>
 
-            <!-- Step 6: Git Tool -->
+            <!-- Step 7: Git Tool -->
             <div class="step-content" id="step-id-gittool">
-                <h1>Step 6: TortoiseGit のインストール</h1>
+                <h1>Step 7: TortoiseGit のインストール</h1>
                 <p>Windowsで Git を GUI で操作するためのツール「TortoiseGit」をインストールしてください。<br />
                     右クリックメニューからclone・push・pullができるようになります。</p>
                 <div class="ssh-action-row" style="margin-top:12px;">
@@ -565,9 +566,9 @@
                 </details>
             </div>
 
-            <!-- Step 7: Clone with TortoiseGit -->
+            <!-- Step 8: Clone with TortoiseGit -->
             <div class="step-content" id="step-id-finish">
-                <h1>Step 7: TortoiseGit でクローンする</h1>
+                <h1>Step 8: TortoiseGit でクローンする</h1>
                 <p>TortoiseGit を使って、リポジトリをPCにダウンロード（クローン）します。<br />
                     <code style="font-size:0.85rem; color:rgba(255,255,255,0.4);">(Org) と (Repo) は管理者に確認してください。</code>
                 </p>
@@ -620,7 +621,7 @@
         // ------- Nav -------
         function updateUI() {
             document.documentElement.style.setProperty('--theme-color', colors[currentStep - 1]);
-            document.getElementById('step-id').innerText = `STEP ${String(currentStep).padStart(2, '0')}/08`;
+            document.getElementById('step-id').innerText = `STEP ${String(currentStep).padStart(2, '0')}/09`;
             const nextBtn = document.getElementById('btn-next');
             const prevBtn = document.getElementById('btn-prev');
             nextBtn.innerText = btnTexts[currentStep - 1];
