@@ -413,7 +413,8 @@
                 <div class="key-box" style="color: #FBC02D; border-color: #FBC02D;">
                     <strong>【⚠️ 超重要！ ネットワークの切り替え】</strong><br />
                     ログイン直後は「自分専用のネットワーク」に繋がっているため、そのままではCanyonにはアクセスできません。<br />
-                    Tailscaleのメニューから <strong>Change Network（または Switch accounts）</strong> を選び、必ず<strong>管理者から招待されたネットワーク</strong>に切り替えてください！
+                    Tailscaleのメニューから <strong>Change Network（または Switch accounts）</strong>
+                    を選び、必ず<strong>管理者から招待されたネットワーク</strong>に切り替えてください！
                 </div>
                 <details>
                     <summary>OS別ダウンロード先</summary>
@@ -436,7 +437,7 @@
             <div class="step-content" id="step-id-bridge">
                 <h1>救済対応: Canyon Bridge (Docker)</h1>
                 <p>もし公式のTailscaleアプリでの接続がうまくいかない場合は、この救済キットを使ってください。<br />
-                   Docker版キットを使うことで、ネットワーク環境に左右されず強制的に接続できます。</p>
+                    Docker版キットを使うことで、ネットワーク環境に左右されず強制的に接続できます。</p>
                 <div class="key-box" style="color: #ff7e1a; border-color: #ff7e1a;">
                     1. 管理者から配布された <strong>canyon-bridge.zip</strong> を解凍。<br />
                     2. <code>.env.example</code> を <code>.env</code> にして認証キーを入力。<br />
@@ -449,7 +450,7 @@
             <div class="step-content" id="step-id-gitea">
                 <h1>Step 4: Gitea アカウントの作成</h1>
                 <p>Gitサーバーの操作画面（Gitea）にアクセスして、ユーザーアカウントを作成してください。<br />
-                    <a href="http://canyon-gitea.tail2582f9.ts.net:3000" target="_blank" rel="noopener noreferrer"
+                    <a href="https://gitea.dencat.dev" target="_blank" rel="noopener noreferrer"
                         style="color: var(--theme-color); text-decoration: none; font-weight: 600;">Gitea を開く ↗</a>
                 </p>
                 <details>
@@ -508,7 +509,7 @@
             <div class="step-content" id="step-id-registration">
                 <h1>Step 6: 公開鍵を Gitea に登録する</h1>
                 <p>前のステップでコピーした公開鍵を、Giteaのアカウント設定に登録してください。<br />
-                    <a href="http://canyon-gitea.tail2582f9.ts.net:3000/user/settings/keys" target="_blank" rel="noopener noreferrer"
+                    <a href="https://gitea.dencat.dev/user/settings/keys" target="_blank" rel="noopener noreferrer"
                         style="color: var(--theme-color); text-decoration: none; font-weight: 600;">Gitea →
                         SSH鍵の設定ページを開く ↗</a>
                 </p>
@@ -754,7 +755,7 @@
         function downloadSSHConfig() {
             const configContent =
                 `Host canyon
-    HostName canyon-gitea.tail2582f9.ts.net
+    HostName gitea.dencat.dev
     Port 222
     User git
     IdentityFile ~/.ssh/id_ed25519
