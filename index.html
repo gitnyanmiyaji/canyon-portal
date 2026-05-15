@@ -273,6 +273,16 @@
             background: rgba(156, 39, 176, 0.3);
         }
 
+        .btn-download {
+            background: rgba(156, 39, 176, 0.15);
+            color: #ce93d8;
+            border: 1px solid rgba(156, 39, 176, 0.3);
+        }
+
+        .btn-download:hover {
+            background: rgba(156, 39, 176, 0.3);
+        }
+
         .key-status {
             font-size: 0.8rem;
             opacity: 0.6;
@@ -365,7 +375,7 @@
     <div class="portal-card">
         <div class="portal-header">
             <div style="font-weight: 600; font-size: 1.1rem; opacity: 0.8;">Canyon Portal</div>
-            <div class="step-id" id="step-id">STEP 01/09</div>
+            <div class="step-id" id="step-id">STEP 01/06</div>
         </div>
 
         <div class="portal-content">
@@ -373,104 +383,97 @@
             <div class="step-content active" id="step-id-welcome">
                 <h1>Canyon 接続ガイド</h1>
                 <p>このガイドでは、Gitサーバー「Canyon」に接続するために必要な設定を順番に案内します。<br />
-                    所要時間は初回のみ15〜30分ほどです。</p>
+                    所要時間は初回のみ10分ほどです。</p>
                 <details>
                     <summary>Canyon とは？</summary>
                     <div class="details-body">
                         <p>「Canyon」は、モデリングコミュニティ向けに用意された非公開のGitサーバーです。<br />
                             大容量ファイルの管理（Git LFS対応予定）や、メンバー間のプロジェクト共有が行えます。<br />
-                            サーバーはTailscale VPN経由でのみアクセス可能なため、外部からの不正アクセスは遮断されています。</p>
+                            サーバーは公開ドメイン portal.dencat.dev 経由でアクセス可能です。外部との通信は暗号化され、安全に保護されています。</p>
                     </div>
                 </details>
             </div>
 
-            <!-- Step 1: Invitation -->
-            <div class="step-content" id="step-id-invitation">
-                <h1>Step 1: 招待を受け取る</h1>
-                <p>Canyonへのアクセスには、管理者からTailscaleの招待が必要です。<br />
-                    管理者に連絡して、招待メールを送ってもらってください。</p>
-                <div class="key-box" style="color: var(--theme-color); border-color: var(--theme-color);">
-                    招待メールの送信元: <strong>Tailscale &lt;no-reply@tailscale.com&gt;</strong><br />
-                    メール内の「Accept invite」または「招待を承諾する」をクリックしてください。
-                </div>
-                <details>
-                    <summary>招待が届かない場合</summary>
-                    <div class="details-body">
-                        <ul>
-                            <li>迷惑メールフォルダを確認してください。</li>
-                            <li>管理者に再送を依頼してください。</li>
-                            <li>すでにTailscaleアカウントをお持ちの場合、招待はそのアカウントに関連付けられます。</li>
-                        </ul>
-                    </div>
-                </details>
-            </div>
-
-            <!-- Step 2: Tailscale -->
-            <div class="step-content" id="step-id-tailscale">
-                <h1>Step 2: Tailscale のインストールと接続</h1>
-                <p>Tailscaleをインストールし、招待を承諾したアカウントでサインインしてください。<br />
-                    アプリのアイコンが<strong>「Connected」</strong>になれば、サーバーへのアクセスが可能になります。</p>
-                <div class="key-box" style="color: #FBC02D; border-color: #FBC02D;">
-                    <strong>【⚠️ 超重要！ ネットワークの切り替え】</strong><br />
-                    ログイン直後は「自分専用のネットワーク」に繋がっているため、そのままではCanyonにはアクセスできません。<br />
-                    Tailscaleのメニューから <strong>Change Network（または Switch accounts）</strong>
-                    を選び、必ず<strong>管理者から招待されたネットワーク</strong>に切り替えてください！
-                </div>
-                <details>
-                    <summary>OS別ダウンロード先</summary>
-                    <div class="details-body">
-                        <ul>
-                            <li><strong>Windows:</strong> <a href="https://tailscale.com/download/windows"
-                                    target="_blank" rel="noopener noreferrer"
-                                    style="color:#00bcd4;">tailscale.com/download/windows ↗</a></li>
-                            <li><strong>macOS:</strong> App Store で「Tailscale」を検索、または <a
-                                    href="https://tailscale.com/download/mac" target="_blank" rel="noopener noreferrer"
-                                    style="color:#00bcd4;">tailscale.com/download/mac ↗</a></li>
-                            <li><strong>Linux:</strong> <code>curl -fsSL https://tailscale.com/install.sh | sh</code>
-                            </li>
-                        </ul>
-                    </div>
-                </details>
-            </div>
-
-            <!-- Step 3: Canyon Bridge (Rescue) -->
-            <div class="step-content" id="step-id-bridge">
-                <h1>救済対応: Canyon Bridge (Docker)</h1>
-                <p>もし公式のTailscaleアプリでの接続がうまくいかない場合は、この救済キットを使ってください。<br />
-                    Docker版キットを使うことで、ネットワーク環境に左右されず強制的に接続できます。</p>
-                <div class="key-box" style="color: #ff7e1a; border-color: #ff7e1a;">
-                    1. 管理者から配布された <strong>canyon-bridge.zip</strong> を解凍。<br />
-                    2. <code>.env.example</code> を <code>.env</code> にして認証キーを入力。<br />
-                    3. <code>docker compose up -d</code> を実行。
-                </div>
-                <p>セットアップ後は <strong>http://localhost:3000</strong> でGiteaにアクセスできます！</p>
-            </div>
-
-            <!-- Step 4: Gitea Account -->
+            <!-- Step 1: Gitea Account -->
             <div class="step-content" id="step-id-gitea">
-                <h1>Step 4: Gitea アカウントの作成</h1>
-                <p>Gitサーバーの操作画面（Gitea）にアクセスして、ユーザーアカウントを作成してください。<br />
-                    <a href="https://gitea.dencat.dev" target="_blank" rel="noopener noreferrer"
-                        style="color: var(--theme-color); text-decoration: none; font-weight: 600;">Gitea を開く ↗</a>
+                <h1>Step 1: Gitea アカウントの確認</h1>
+                <p>Gitサーバー（Gitea）へのアクセスには専用のアカウントが必要です。<br />
+                    管理者がアカウントを作成し、個別にユーザー名とパスワードを連絡します。</p>
+                <div class="key-box" style="color: #4CAF50; border-color: #4CAF50;">
+                    1. 管理者から連絡された<strong>ユーザー名</strong>と<strong>パスワード</strong>を手元に用意してください。<br />
+                    2. <a href="https://portal.dencat.dev" target="_blank" rel="noopener noreferrer" style="color: #4CAF50; font-weight: 600;">Gitea</a> にログインできることを確認してください。
+                </div>
+                <p style="font-size:0.9rem; opacity:0.7;">
+                    ※ HTTPS でクローンする際も、このユーザー名とパスワード（またはトークン）を使用します。
                 </p>
-                <details>
-                    <summary>アカウント作成の手順</summary>
+            </div>
+
+            <!-- Step 2: Git Tool -->
+            <div class="step-content" id="step-id-gittool">
+                <h1>Step 2: TortoiseGit のインストール</h1>
+                <p>Windowsで Git を GUI で操作するためのツール「TortoiseGit」をインストールしてください。<br />
+                    右クリックメニューからclone・push・pullができるようになります。</p>
+                <div class="ssh-action-row" style="margin-top:12px;">
+                    <a href="https://tortoisegit.org/download/" target="_blank" rel="noopener noreferrer" style="display:inline-flex; align-items:center; gap:6px; height:38px; padding:0 18px;
+                                background:rgba(251,192,45,0.15); color:#FBC02D; border:1px solid rgba(251,192,45,0.3);
+                                border-radius:8px; font-size:0.88rem; font-weight:600; text-decoration:none;
+                                transition:0.2s;" onmouseover="this.style.background='rgba(251,192,45,0.3)'"
+                        onmouseout="this.style.background='rgba(251,192,45,0.15)'">
+                        🐢 TortoiseGit をダウンロード ↗
+                    </a>
+                </div>
+                <details style="margin-top:14px;">
+                    <summary>インストール手順</summary>
                     <div class="details-body">
                         <ol>
-                            <li>上のリンクからGiteaのトップページを開く。</li>
-                            <li>右上の「Register（登録）」をクリック。</li>
-                            <li>ユーザー名・メールアドレス・パスワードを入力して登録する。</li>
-                            <li>登録後、管理者にユーザー名を伝えると、リポジトリへのアクセス権が付与されます。</li>
+                            <li>上のリンクから <strong>TortoiseGit</strong>（64-bit）をダウンロードしてインストールする。</li>
+                            <li>インストール後、任意のフォルダを右クリックして「TortoiseGit」メニューが表示されることを確認する。</li>
+                            <li>初回起動時に「Git for Windows」が必要と案内される場合は、同ページから <strong>Git for Windows</strong> もインストールする。
+                            </li>
                         </ol>
                     </div>
                 </details>
             </div>
 
-            <!-- Step 5: SSH Key -->
+            <!-- Step 3: Clone with HTTPS -->
+            <div class="step-content" id="step-id-finish">
+                <h1>Step 3: HTTPS でクローンする</h1>
+                <p>準備ができたら、TortoiseGit を使ってリポジトリをダウンロード（クローン）しましょう！<br />
+                    <code style="font-size:0.85rem; color:rgba(255,255,255,0.4);">(Org) と (Repo) は管理者に確認してください。</code>
+                </p>
+                <div class="key-box" style="color:#4CAF50; border-color:#4CAF50;">
+                    https://portal.dencat.dev/(Org)/(Repo).git
+                </div>
+                <details>
+                    <summary>クローン手順（HTTPS）</summary>
+                    <div class="details-body">
+                        <ol>
+                            <li>クローン先にしたいフォルダを右クリックし、「Git クローン(複製)...」を選択。</li>
+                            <li>「URL」欄に上のURLを入力する。</li>
+                            <li>「OK」を押すと、Gitea のユーザー名とパスワードを求められるので入力してください。</li>
+                            <li>クローンが完了したら成功です！</li>
+                        </ol>
+                    </div>
+                </details>
+                <details>
+                    <summary>もっと便利に使いたい（SSH設定）</summary>
+                    <div class="details-body">
+                        <p>プッシュのたびにパスワードを入力するのが面倒な場合は、SSH 鍵を設定するのがおすすめです。<br />
+                            設定したい場合は、以下のボタンから高度な設定に進んでください。</p>
+                        <button class="btn-sm" 
+                                style="background:var(--theme-color); color:#000; margin-top:8px; font-weight:600; border:none; cursor:pointer;" 
+                                onclick="handleNext()">
+                            SSH 設定に進む ➔
+                        </button>
+                    </div>
+                </details>
+            </div>
+
+            <!-- Step 4: SSH Key (Optional) -->
             <div class="step-content" id="step-id-ssh">
-                <h1>Step 5: SSH 認証鍵の生成</h1>
-                <p>Gitの操作（clone / push / pull）にはSSH鍵認証が必要です。<br />
-                    下のボタンを押すと、ブラウザ内で鍵ペア（公開鍵・秘密鍵）が生成されます。<strong>鍵はサーバーに送信されません。</strong></p>
+                <h1>Step 4: SSH 認証鍵の生成 (任意)</h1>
+                <p>パスワード入力を省略したい方向けの設定です。<br />
+                    下のボタンを押すと、ブラウザ内で鍵ペア（公開鍵・秘密鍵）が生成されます。</p>
                 <label style="font-size:0.85rem; opacity:0.5;">鍵のコメント（任意）— Giteaの設定画面で識別するための名前</label>
                 <input type="text" id="ssh-comment" class="ssh-input" placeholder="例: myname-windows" maxlength="60" />
                 <div class="ssh-action-row">
@@ -487,29 +490,30 @@
                     </div>
                     <div class="key-status" id="key-status"></div>
                 </div>
-                <details>
-                    <summary>SSH鍵とは？秘密鍵の保存場所について</summary>
+                <details style="margin-top:12px;">
+                    <summary>SSH設定ファイルの配置場所</summary>
                     <div class="details-body">
-                        <p>SSH鍵はパスワードの代わりに使用する認証情報です。「秘密鍵」と「公開鍵」の2つがセットです。</p>
+                        <p>ダウンロードした <code>config</code> ファイルを、以下の場所に配置してください。</p>
                         <ul>
-                            <li><strong>公開鍵</strong>（次のステップでGiteaに登録）: サーバーに渡すもの。外部に公開しても問題ありません。</li>
-                            <li><strong>秘密鍵</strong>（ダウンロードして保存）: 絶対に他人に渡さないでください。</li>
+                            <li><strong>Windows:</strong> <code>C:\Users\あなたのユーザー名\.ssh\config</code></li>
+                            <li><strong>macOS / Linux:</strong> <code>~/.ssh/config</code></li>
                         </ul>
-                        <p>秘密鍵の保存先:</p>
-                        <ul>
-                            <li><strong>Windows:</strong> <code>C:\Users\あなたのユーザー名\.ssh\id_ed25519</code></li>
-                            <li><strong>macOS / Linux:</strong> <code>~/.ssh/id_ed25519</code></li>
-                        </ul>
-                        <p>保存後、<code>chmod 600 ~/.ssh/id_ed25519</code>（macOS/Linux）で権限を設定してください。</p>
+                        <p>ファイルの中身はこのようになっています：</p>
+                        <pre
+                            style="background:rgba(0,0,0,0.4); padding:10px; border-radius:6px; font-size:0.82rem; color:#00bcd4; overflow-x:auto;">Host canyon
+    HostName portal.dencat.dev
+    Port 222
+    User git
+    IdentityFile ~/.ssh/id_ed25519</pre>
                     </div>
                 </details>
             </div>
 
-            <!-- Step 6: Registration -->
+            <!-- Step 5: SSH Registration (Optional) -->
             <div class="step-content" id="step-id-registration">
-                <h1>Step 6: 公開鍵を Gitea に登録する</h1>
+                <h1>Step 5: 公開鍵を Gitea に登録する</h1>
                 <p>前のステップでコピーした公開鍵を、Giteaのアカウント設定に登録してください。<br />
-                    <a href="https://gitea.dencat.dev/user/settings/keys" target="_blank" rel="noopener noreferrer"
+                    <a href="https://portal.dencat.dev/user/settings/keys" target="_blank" rel="noopener noreferrer"
                         style="color: var(--theme-color); text-decoration: none; font-weight: 600;">Gitea →
                         SSH鍵の設定ページを開く ↗</a>
                 </p>
@@ -520,89 +524,10 @@
                             <li>上のリンクからGiteaのSSH鍵設定ページを開く。</li>
                             <li>「鍵を追加する」または「Add Key」をクリック。</li>
                             <li>「タイトル」に任意の名前（例: my-pc）を入力。</li>
-                            <li>「コンテンツ」欄に、前のステップでコピーした公開鍵（<code>ssh-ed25519 AAAA...</code> で始まる文字列）を貼り付ける。</li>
-                            <li>「鍵を追加する」ボタンで保存する。</li>
+                            <li>「コンテンツ」欄に、前のステップでコピーした公開鍵を貼り付ける。</li>
+                            <li>「鍵を追加する」ボタンで保存。</li>
                         </ol>
-                    </div>
-                </details>
-            </div>
-
-            <!-- Step 7: Git Tool -->
-            <div class="step-content" id="step-id-gittool">
-                <h1>Step 7: TortoiseGit のインストール</h1>
-                <p>Windowsで Git を GUI で操作するためのツール「TortoiseGit」をインストールしてください。<br />
-                    右クリックメニューからclone・push・pullができるようになります。</p>
-                <div class="ssh-action-row" style="margin-top:12px;">
-                    <a href="https://tortoisegit.org/download/" target="_blank" rel="noopener noreferrer" style="display:inline-flex; align-items:center; gap:6px; height:38px; padding:0 18px;
-                               background:rgba(251,192,45,0.15); color:#FBC02D; border:1px solid rgba(251,192,45,0.3);
-                               border-radius:8px; font-size:0.88rem; font-weight:600; text-decoration:none;
-                               transition:0.2s;" onmouseover="this.style.background='rgba(251,192,45,0.3)'"
-                        onmouseout="this.style.background='rgba(251,192,45,0.15)'">
-                        🐢 TortoiseGit をダウンロード ↗
-                    </a>
-                </div>
-                <details style="margin-top:14px;">
-                    <summary>インストール手順</summary>
-                    <div class="details-body">
-                        <ol>
-                            <li>上のリンクから <strong>TortoiseGit</strong>（64-bit）をダウンロードしてインストールする。</li>
-                            <li>インストール後、任意のフォルダを右クリックして「TortoiseGit」メニューが表示されることを確認する。</li>
-                            <li>初回起動時に「Git for Windows」が必要と案内される場合は、同ページから <strong>Git for Windows</strong> もインストールする。
-                            </li>
-                        </ol>
-                    </div>
-                </details>
-                <details>
-                    <summary>SSH設定ファイルの確認（重要）</summary>
-                    <div class="details-body">
-                        <p>Step 4 でダウンロードした <code>config</code> ファイルを、以下の場所に配置してください。<br />
-                            このファイルにより、TortoiseGit が Canyon の特殊なSSHポート（222番）を自動認識します。</p>
-                        <ul>
-                            <li>配置先: <code>C:\Users\あなたのユーザー名\.ssh\config</code></li>
-                            <li>（<code>.ssh</code> フォルダがない場合は新規作成してください）</li>
-                        </ul>
-                        <p>ファイルの中身はこのようになっています：</p>
-                        <pre
-                            style="background:rgba(0,0,0,0.4); padding:10px; border-radius:6px; font-size:0.82rem; color:#00bcd4; overflow-x:auto;">Host canyon
-    HostName canyon-gitea.tail2582f9.ts.net
-    Port 222
-    User git
-    IdentityFile ~/.ssh/id_ed25519</pre>
-                    </div>
-                </details>
-            </div>
-
-            <!-- Step 8: Clone with TortoiseGit -->
-            <div class="step-content" id="step-id-finish">
-                <h1>Step 8: TortoiseGit でクローンする</h1>
-                <p>TortoiseGit を使って、リポジトリをPCにダウンロード（クローン）します。<br />
-                    <code style="font-size:0.85rem; color:rgba(255,255,255,0.4);">(Org) と (Repo) は管理者に確認してください。</code>
-                </p>
-                <div class="key-box" style="color:#4CAF50; border-color:#4CAF50;">
-                    canyon:/(Org)/(Repo).git
-                </div>
-                <details>
-                    <summary>クローン手順（TortoiseGit）</summary>
-                    <div class="details-body">
-                        <ol>
-                            <li>クローン先にしたいフォルダを右クリックし、「TortoiseGit」→「クローン...」を選択。</li>
-                            <li>「URL」欄に上のURL（<code>canyon:/...</code> の形式）を入力する。</li>
-                            <li>「参照するディレクトリ」に保存したいフォルダのパスを確認して「OK」。</li>
-                            <li>初回接続時に「Known hosts」への追加確認ダイアログが出たら「はい」を選択。</li>
-                            <li>クローンが完了したら成功です。</li>
-                        </ol>
-                    </div>
-                </details>
-                <details>
-                    <summary>クローンが失敗する場合</summary>
-                    <div class="details-body">
-                        <ul>
-                            <li>Tailscaleが「Connected」状態か確認してください。</li>
-                            <li><code>C:\Users\あなた\.ssh\config</code> が正しく配置されているか確認してください。</li>
-                            <li><code>C:\Users\あなた\.ssh\id_ed25519</code>（秘密鍵）が存在するか確認してください。</li>
-                            <li>GiteaのSSH設定に公開鍵が登録されているか確認してください（Step 5）。</li>
-                            <li>Giteaのリポジトリへのアクセス権が付与されているか管理者に確認してください。</li>
-                        </ul>
+                        <p style="margin-top:8px;">登録後は、URL を <code>canyon:/...</code> にすることで SSH 接続が可能になります。</p>
                     </div>
                 </details>
             </div>
@@ -617,20 +542,28 @@
 
     <script>
         let currentStep = 1;
-        const totalSteps = 9;
-        const SSH_STEP_INDEX = 6; // 1-based index of the 'ssh' step
+        const totalSteps = 6;
+        const SSH_STEP_INDEX = 5; // 1-based index of the 'ssh' step
 
-        const stepIds = ['welcome', 'invitation', 'tailscale', 'bridge', 'gitea', 'ssh', 'registration', 'gittool', 'finish'];
-        const colors = ['#FBC02D', '#FF9800', '#00BCD4', '#ff7e1a', '#0052cc', '#9C27B0', '#609926', '#FF7043', '#4CAF50'];
-        const btnTexts = ['ガイドを開始する', '招待をうけとった', '接続を確認した (繋がらない場合は次へ)', 'ブリッジの準備完了', '登録完了', '鍵の準備ができたら次へ', '登録を完了した', 'インストール完了', '最初に戻る'];
+        const stepIds = ['welcome', 'gitea', 'gittool', 'finish', 'ssh', 'registration'];
+        const colors = ['#FBC02D', '#0052cc', '#FF7043', '#4CAF50', '#9C27B0', '#609926'];
+        const btnTexts = ['ガイドを開始する', 'アカウントを作った', 'インストール完了', '', '鍵の準備ができたら次へ', '最初に戻る'];
 
         // ------- Nav -------
         function updateUI() {
             document.documentElement.style.setProperty('--theme-color', colors[currentStep - 1]);
-            document.getElementById('step-id').innerText = `STEP ${String(currentStep).padStart(2, '0')}/09`;
+            document.getElementById('step-id').innerText = `STEP ${String(currentStep).padStart(2, '0')}/06`;
             const nextBtn = document.getElementById('btn-next');
             const prevBtn = document.getElementById('btn-prev');
-            nextBtn.innerText = btnTexts[currentStep - 1];
+
+            // Step 3 (finish) ではメインボタンを隠す（詳細内から進むため）
+            if (currentStep === 4) {
+                nextBtn.style.display = 'none';
+            } else {
+                nextBtn.style.display = 'inline-block';
+                nextBtn.innerText = btnTexts[currentStep - 1];
+            }
+            
             prevBtn.style.visibility = currentStep > 1 ? 'visible' : 'hidden';
 
             document.querySelectorAll('.step-content').forEach(el => el.classList.remove('active'));
@@ -755,7 +688,7 @@
         function downloadSSHConfig() {
             const configContent =
                 `Host canyon
-    HostName gitea.dencat.dev
+    HostName portal.dencat.dev
     Port 222
     User git
     IdentityFile ~/.ssh/id_ed25519
