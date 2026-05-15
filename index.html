@@ -401,7 +401,8 @@
                     管理者がアカウントを作成し、個別にユーザー名とパスワードを連絡します。</p>
                 <div class="key-box" style="color: #4CAF50; border-color: #4CAF50;">
                     1. 管理者から連絡された<strong>ユーザー名</strong>と<strong>パスワード</strong>を手元に用意してください。<br />
-                    2. <a href="https://portal.dencat.dev" target="_blank" rel="noopener noreferrer" style="color: #4CAF50; font-weight: 600;">Gitea</a> にログインできることを確認してください。
+                    2. <a href="https://portal.dencat.dev" target="_blank" rel="noopener noreferrer"
+                        style="color: #4CAF50; font-weight: 600;">Gitea</a> にログインできることを確認してください。
                 </div>
                 <p style="font-size:0.9rem; opacity:0.7;">
                     ※ HTTPS でクローンする際も、このユーザー名とパスワード（またはトークン）を使用します。
@@ -460,9 +461,9 @@
                     <div class="details-body">
                         <p>プッシュのたびにパスワードを入力するのが面倒な場合は、SSH 鍵を設定するのがおすすめです。<br />
                             設定したい場合は、以下のボタンから高度な設定に進んでください。</p>
-                        <button class="btn-sm" 
-                                style="background:var(--theme-color); color:#000; margin-top:8px; font-weight:600; border:none; cursor:pointer;" 
-                                onclick="handleNext()">
+                        <button class="btn-sm"
+                            style="background:var(--theme-color); color:#000; margin-top:8px; font-weight:600; border:none; cursor:pointer;"
+                            onclick="handleNext()">
                             SSH 設定に進む ➔
                         </button>
                     </div>
@@ -527,7 +528,7 @@
                             <li>「コンテンツ」欄に、前のステップでコピーした公開鍵を貼り付ける。</li>
                             <li>「鍵を追加する」ボタンで保存。</li>
                         </ol>
-                        <p style="margin-top:8px;">登録後は、URL を <code>canyon:/...</code> にすることで SSH 接続が可能になります。</p>
+                        <p style="margin-top:8px;">登録後は、URL を <code>ssh:/...</code> にすることで SSH 接続が可能になります。</p>
                     </div>
                 </details>
             </div>
@@ -563,7 +564,7 @@
                 nextBtn.style.display = 'inline-block';
                 nextBtn.innerText = btnTexts[currentStep - 1];
             }
-            
+
             prevBtn.style.visibility = currentStep > 1 ? 'visible' : 'hidden';
 
             document.querySelectorAll('.step-content').forEach(el => el.classList.remove('active'));
